@@ -22,7 +22,7 @@ include::{snippets}/feed-inquiry/path-parameters.adoc[]
 == 피드 목록 조회
 === 요청
 include::{snippets}/feed-list/http-request.adoc[]
-include::{snippets}/feed-list/path-parameters.adoc[]
+include::{snippets}/feed-list/query-parameters.adoc[]
 
 === 응답
 include::{snippets}/feed-list/http-response.adoc[]
