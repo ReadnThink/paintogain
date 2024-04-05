@@ -1,0 +1,24 @@
+= PainToGain API DOCS
+:doctype: book
+:icons: font
+:source-highlighter: highlighter
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+== 피드 단건 조회
+=== 요청
+include::{snippets}/feed-inquiry/http-request.adoc[]
+include::{snippets}/feed-inquiry/path-parameters.adoc[]
+
+=== 응답
+include::{snippets}/feed-inquiry/http-response.adoc[]
+include::{snippets}/feed-inquiry/response-fields.adoc[]
+
+== 피드 저장
+=== 요청
+include::{snippets}/feed-create/http-request.adoc[]
+include::{snippets}/feed-create/request-fields.adoc[]
+
+=== 응답
+include::{snippets}/feed-create/http-response.adoc[]
