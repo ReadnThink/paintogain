@@ -2,8 +2,10 @@ package com.paintogain.controller.feed;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paintogain.controller.feed.request.FeedCreate;
+import com.paintogain.controller.feed.request.FeedEdit;
 import com.paintogain.domain.Feed;
 import com.paintogain.repository.FeedRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +18,10 @@ import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
@@ -41,9 +47,14 @@ public class FeedControllerDocTest {
     @Autowired
     FeedRepository feedRepository;
 
+    @BeforeEach
+    void setUp() {
+        feedRepository.deleteAll();
+    }
+
     @Test
     @DisplayName("피드 단건조회 테스트")
-    void 피드_조회() throws Exception {
+    void 피드_단건조회() throws Exception {
         // given
         Feed feed = Feed.builder()
                 .title("제목")
@@ -51,7 +62,8 @@ public class FeedControllerDocTest {
                 .build();
         feedRepository.save(feed);
 
-        mockMvc.perform(get("/feeds/{feedId}", 1L)
+        // expect
+        mockMvc.perform(get("/feeds/{feedId}", feed.getId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -67,6 +79,32 @@ public class FeedControllerDocTest {
     }
 
     @Test
+    @DisplayName("피드 목록 조회 테스트 - 10건씩 페이징 처리")
+    void 피드_목록조회() throws Exception {
+        // given
+        List<Feed> requestFeedList = IntStream.range(1, 31)
+                .mapToObj(i -> Feed.builder()
+                        .title("Title" + i)
+                        .content("Content" + i)
+                        .build())
+                .collect(Collectors.toList());
+        feedRepository.saveAll(requestFeedList);
+
+        // expect
+        mockMvc.perform(get("/feeds?page=1&size=10&sort=id,desc")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("feed-list",
+                        responseFields(
+                                fieldWithPath("[].id").description("피드 ID"),
+                                fieldWithPath("[].title").description("제목"),
+                                fieldWithPath("[].content").description("내용")
+                        )
+                ));
+    }
+
+    @Test
     @DisplayName("피드 저장 테스트")
     void 피드_저장() throws Exception {
         // given
@@ -74,21 +112,84 @@ public class FeedControllerDocTest {
                 .title("제목")
                 .content("내용")
                 .build();
-        String feedCreateJson = objectMapper.writeValueAsString(feedCreate);
+        String json = objectMapper.writeValueAsString(feedCreate);
 
+        // expect
         mockMvc.perform(post("/feeds")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(feedCreateJson)
+                        .content(json)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("feed-create",
-                            requestFields(
-                                    fieldWithPath("title").description("제목")
-                                            .attributes(key("constraint").value("제목을 입력해 주세요")),
-                                    fieldWithPath("content").description("내용").optional()
-                            )
+                                requestFields(
+                                        fieldWithPath("title").description("제목")
+                                                .attributes(key("constraint").value("제목을 입력해 주세요"))
+                                                .optional(),
+                                        fieldWithPath("content").description("내용")
+                                                .attributes(key("constraint").value("내용을 입력해 주세요"))
+                                                .optional()
+                                )
                         )
                 );
+    }
+
+    @Test
+    @DisplayName("피드 저장 테스트")
+    void 피드_수정() throws Exception {
+        Feed feed = Feed.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+        feedRepository.save(feed);
+
+        // given
+        FeedEdit feedEdit = FeedEdit.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+        String json = objectMapper.writeValueAsString(feedEdit);
+
+        // expect
+        mockMvc.perform(patch("/feeds/{feedId}", feed.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("feed-edit", pathParameters(
+                                        parameterWithName("feedId").description("피드 ID")
+                                ),
+                                requestFields(
+                                        fieldWithPath("title").description("제목")
+                                                .attributes(key("constraint").value("수정할 제목을 입력해 주세요"))
+                                                .optional(),
+                                        fieldWithPath("content").description("내용")
+                                                .attributes(key("constraint").value("수정할 내용을 입력해 주세요"))
+                                                .optional()
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @DisplayName("피드 단건삭제 테스트")
+    void 피드_삭제() throws Exception {
+        // given
+        Feed feed = Feed.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+        feedRepository.save(feed);
+
+        // expect
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/feeds/{feedId}", feed.getId())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("feed-delete", pathParameters(
+                                parameterWithName("feedId").description("피드 ID")
+                        )
+                ));
     }
 }

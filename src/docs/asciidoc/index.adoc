@@ -1,19 +1,10 @@
 = PainToGain API DOCS
 :doctype: book
 :icons: font
-:source-highlighter: highlighter
+:source-highlighter: highlightjs
 :toc: left
 :toclevels: 2
 :sectlinks:
-
-== 피드 단건 조회
-=== 요청
-include::{snippets}/feed-inquiry/http-request.adoc[]
-include::{snippets}/feed-inquiry/path-parameters.adoc[]
-
-=== 응답
-include::{snippets}/feed-inquiry/http-response.adoc[]
-include::{snippets}/feed-inquiry/response-fields.adoc[]
 
 == 피드 저장
 === 요청
@@ -22,3 +13,34 @@ include::{snippets}/feed-create/request-fields.adoc[]
 
 === 응답
 include::{snippets}/feed-create/http-response.adoc[]
+
+== 피드 단건 조회
+=== 요청
+include::{snippets}/feed-inquiry/http-request.adoc[]
+include::{snippets}/feed-inquiry/path-parameters.adoc[]
+
+== 피드 목록 조회
+=== 요청
+include::{snippets}/feed-list/http-request.adoc[]
+include::{snippets}/feed-list/path-parameters.adoc[]
+
+=== 응답
+include::{snippets}/feed-list/http-response.adoc[]
+include::{snippets}/feed-list/response-fields.adoc[]
+
+== 피드 수정
+=== 요청
+include::{snippets}/feed-edit/http-request.adoc[]
+include::{snippets}/feed-edit/path-parameters.adoc[]
+include::{snippets}/feed-edit/request-fields.adoc[]
+
+=== 응답
+include::{snippets}/feed-edit/http-response.adoc[]
+
+== 피드 단건 삭제
+=== 요청
+include::{snippets}/feed-delete/http-request.adoc[]
+include::{snippets}/feed-delete/path-parameters.adoc[]
+
+=== 응답
+include::{snippets}/feed-delete/http-response.adoc[]
