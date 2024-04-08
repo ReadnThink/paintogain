@@ -6,7 +6,7 @@ const title = ref("")
 const content = ref("")
 
 const write = function () {
-  axios.post('http://localhost:8080/feeds', {
+  axios.post('/my-backend-api/feeds', {
     title: title.value,
     content: content.value
   })
