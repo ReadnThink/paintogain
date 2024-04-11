@@ -2,10 +2,7 @@ package com.paintogain.domain;
 
 import com.paintogain.controller.feed.request.FeedEdit;
 import com.paintogain.controller.feed.response.FeedResponse;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -17,6 +14,7 @@ public class Feed {
     private Long id;
 
     private String title;
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @Builder

@@ -1,19 +1,16 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import Header from '@/components/Header.vue'
+import Content from '@/components/Content.vue'
 </script>
 
 <template>
-  <header>
+  <Header />
+  <Content />
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/write">피드 작성</RouterLink>
-      </nav>
-  </header>
-
-  <RouterView />
 </template>
 
 <style>
-
+body {
+}
 </style>

@@ -1,3 +1,6 @@
+server:
+  port: 8081
+
 spring:
   h2:
     console:
@@ -7,7 +10,6 @@ spring:
   data:
     web:
       pageable:
-        # web ????? ??
         one-indexed-parameters: true
 
   datasource:
