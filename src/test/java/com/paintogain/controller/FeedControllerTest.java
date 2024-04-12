@@ -1,4 +1,4 @@
-package com.paintogain.controller.feed;
+package com.paintogain.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paintogain.controller.feed.request.FeedCreate;
@@ -56,6 +56,7 @@ class FeedControllerTest {
 
             //when
             mockMvc.perform(post("/feeds")
+                            .header("authorization", "sol")
                             .contentType(APPLICATION_JSON)
                             .content(feedCreateJson)
                     )
@@ -99,6 +100,7 @@ class FeedControllerTest {
 
             // when
             mockMvc.perform(post("/feeds")
+                            .header("authorization", "sol")
                             .contentType(APPLICATION_JSON)
                             .content(feedCreateJson)
                     )
@@ -185,6 +187,7 @@ class FeedControllerTest {
 
             // expected
             mockMvc.perform(patch("/feeds/{feedId}", feed.getId())
+                            .header("authorization", "sol")
                             .contentType(APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(feedEdit))
                     )
@@ -197,6 +200,7 @@ class FeedControllerTest {
 
             // expected
             mockMvc.perform(patch("/feeds/{feedId}", 1)
+                            .header("authorization", "sol")
                             .contentType(APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(feedEdit))
                     )
@@ -216,6 +220,7 @@ class FeedControllerTest {
 
             // expected
             mockMvc.perform(delete("/feeds/{feedId}", feed.getId())
+                            .header("authorization", "sol")
                             .contentType(APPLICATION_JSON)
                     )
                     .andExpect(status().isOk())

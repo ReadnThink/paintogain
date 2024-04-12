@@ -1,0 +1,7 @@
+### 테스트 요청
+### LocalPost = 8090
+   ### 변수화 할 수 있음 나중에 찾아볼것 (intellij http)
+
+GET http://localhost:8090/test
+Content-Type: application/json
+Authorization: asdfa

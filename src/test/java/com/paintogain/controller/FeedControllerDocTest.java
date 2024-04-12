@@ -1,4 +1,4 @@
-package com.paintogain.controller.feed;
+package com.paintogain.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paintogain.controller.feed.request.FeedCreate;
@@ -16,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;

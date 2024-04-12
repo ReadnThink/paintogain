@@ -1,19 +1,28 @@
 server:
-  port: 8081
+  port: 8090
 
 spring:
+  # h2 db
   h2:
     console:
       enabled: true
       path: /h2-console
-
-  data:
-    web:
-      pageable:
-        one-indexed-parameters: true
-
   datasource:
     url: jdbc:h2:mem:paintogain
     username: sa
     password:
     driver-class-name: org.h2.Driver
+
+  # page 0을넣어도 1로 치환
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
+
+  # data.sql 넣기 위함
+  jpa:
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+

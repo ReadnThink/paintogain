@@ -1,9 +1,9 @@
 package com.paintogain.controller.feed;
 
+import com.paintogain.config.data.UserSession;
 import com.paintogain.controller.feed.request.FeedCreate;
 import com.paintogain.controller.feed.request.FeedEdit;
 import com.paintogain.controller.feed.response.FeedResponse;
-import com.paintogain.exception.custom.InvalidRequest;
 import com.paintogain.service.feed.FeedService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +21,18 @@ public class FeedController {
         this.feedService = feedService;
     }
 
+    @GetMapping("/test")
+    public Long test(UserSession userSession) {
+        log.info("UserSession >>> {}", userSession.id);
+        return userSession.getId();
+    }
+
     @PostMapping("/feeds")
-    public void feed(@RequestBody @Valid FeedCreate feedCreate) {
-        feedCreate.isContainBadWords();
-        feedService.save(feedCreate);
+    public void feed(@RequestBody @Valid FeedCreate feedCreate, @RequestHeader String authorization) {
+        if (authorization.equals("sol")) {
+            feedCreate.isContainBadWords();
+            feedService.save(feedCreate);
+        }
     }
 
     @GetMapping("/feeds/{feedId}")
@@ -38,12 +46,16 @@ public class FeedController {
     }
 
     @PatchMapping("/feeds/{feedId}")
-    public void edit(@PathVariable Long feedId, @RequestBody @Valid FeedEdit feedEdit) {
-        feedService.edit(feedId, feedEdit);
+    public void edit(@PathVariable Long feedId, @RequestBody @Valid FeedEdit feedEdit, @RequestHeader String authorization) {
+        if (authorization.equals("sol")) {
+            feedService.edit(feedId, feedEdit);
+        }
     }
 
     @DeleteMapping("/feeds/{feedId}")
-    public void delete(@PathVariable Long feedId) {
-        feedService.delete(feedId);
+    public void delete(@PathVariable Long feedId, @RequestHeader String authorization) {
+        if (authorization.equals("sol")) {
+            feedService.delete(feedId);
+        }
     }
 }
