@@ -1,15 +1,17 @@
 package com.paintogain.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+@Getter
 @Entity(name = "USERS")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
@@ -22,4 +24,24 @@ public class User {
     private String password;
     @CreatedDate
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Session> sessions = new ArrayList<>();
+
+    @Builder
+    public User(Long id, String name, String email, String password, LocalDateTime createdAt) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.createdAt = createdAt;
+    }
+
+    public Session addSession() {
+        Session session = Session.builder()
+                .user(this)
+                .build();
+        sessions.add(session);
+        return session;
+    }
 }

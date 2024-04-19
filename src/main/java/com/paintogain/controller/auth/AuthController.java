@@ -1,30 +1,39 @@
 package com.paintogain.controller.auth;
 
-import com.paintogain.domain.User;
-import com.paintogain.exception.custom.InvalidSigninInformation;
-import com.paintogain.repository.UserRepository;
+import com.paintogain.service.auth.AuthService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.Duration;
 
 @Slf4j
 @RestController
 public class AuthController {
 
-    private final UserRepository userRepository;
+    private final AuthService authService;
 
-    public AuthController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
     @PostMapping("/auth/login")
-    public User login(@RequestBody Login login) {
-        log.info("login::{}", login);
+    public ResponseEntity login(@RequestBody Login login) {
+        String accessToken = authService.signIn(login);
+        ResponseCookie cookie = ResponseCookie.from("SESSION", accessToken)
+                .domain("localhost")
+                .path("/")
+                .httpOnly(true)
+                .maxAge(Duration.ofDays(30))
+                .sameSite("Strict")
+                .build();
 
-        User user = userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword())
-                .orElseThrow(() -> new InvalidSigninInformation());
-
-        return user;
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .build();
     }
 }
