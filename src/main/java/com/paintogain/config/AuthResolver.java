@@ -1,23 +1,27 @@
 package com.paintogain.config;
 
 import com.paintogain.config.data.UserSession;
-import com.paintogain.domain.Session;
 import com.paintogain.exception.custom.Unauthorized;
-import com.paintogain.exception.custom.UserNotFound;
 import com.paintogain.repository.SessionRepository;
-import lombok.RequiredArgsConstructor;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+@Slf4j
 public class AuthResolver implements HandlerMethodArgumentResolver {
 
     private final SessionRepository sessionRepository;
-
-    public AuthResolver(SessionRepository sessionRepository) {
+    private final AppConfig appConfig;
+    public AuthResolver(SessionRepository sessionRepository, AppConfig appConfig) {
         this.sessionRepository = sessionRepository;
+        this.appConfig = appConfig;
     }
 
     @Override
@@ -27,16 +31,23 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        String accessToken = webRequest.getHeader("Authorization");
-        if (accessToken == null || accessToken.equals("")) {
+        String jws = webRequest.getHeader("Authorization");
+        if (jws == null || jws.equals("")) {
             throw new Unauthorized();
         }
 
-        // db에서 id 찾기
-        Session session = sessionRepository.findByAccessToken(accessToken)
-                .orElseThrow(Unauthorized::new);
+        try {
 
+            Jws<Claims> claims = Jwts.parser()
+                    .setSigningKey(appConfig.getSecretKey())
+                    .build()
+                    .parseSignedClaims(jws);
 
-        return new UserSession(session.getUser().getId());
+            log.info(">>>> claims : ", claims);
+            String userId = claims.getPayload().getSubject();
+            return new UserSession(Long.parseLong(userId));
+        } catch (JwtException e) {
+            throw new Unauthorized();
+        }
     }
 }

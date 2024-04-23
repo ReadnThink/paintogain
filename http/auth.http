@@ -7,3 +7,10 @@ Content-Type: application/json
   "email": "sol@gmail.com",
   "password": "1234"
 }
+
+
+### 인증 페이지 요청
+
+GET http://localhost:8090/test
+Content-Type: application/json
+Cookie: SESSION=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzEzNzc4NDI1fQ.RJIyZL3IAuJK4MlEgt11sd3ekqTuCAmBGNC4lnBP-2U

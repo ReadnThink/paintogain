@@ -26,3 +26,5 @@ spring:
     init:
       mode: always
 
+jwt:
+  secretKey: "7BRV1zT/adqZFA2eKmVZLY4yApVWuz0CWKqVIf+2oc4="
