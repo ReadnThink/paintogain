@@ -3,11 +3,9 @@ package com.paintogain.service.auth;
 import com.paintogain.controller.auth.request.Signup;
 import com.paintogain.domain.User;
 import com.paintogain.exception.custom.AlreadyExistsEmailException;
-import com.paintogain.exception.custom.InvalidSigninInformation;
 import com.paintogain.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AuthService {

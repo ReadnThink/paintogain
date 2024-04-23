@@ -3,7 +3,10 @@ package com.paintogain.domain;
 import com.paintogain.controller.feed.request.FeedEdit;
 import com.paintogain.controller.feed.response.FeedResponse;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

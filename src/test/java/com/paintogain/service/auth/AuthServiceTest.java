@@ -3,16 +3,18 @@ package com.paintogain.service.auth;
 import com.paintogain.controller.auth.request.Signup;
 import com.paintogain.domain.User;
 import com.paintogain.exception.custom.AlreadyExistsEmailException;
-import com.paintogain.exception.custom.InvalidSigninInformation;
 import com.paintogain.repository.UserRepository;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class AuthServiceTest {

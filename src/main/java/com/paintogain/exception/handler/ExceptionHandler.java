@@ -1,6 +1,5 @@
 package com.paintogain.exception.handler;
 
-import com.paintogain.exception.custom.FeedNotFound;
 import com.paintogain.exception.custom.GlobalException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

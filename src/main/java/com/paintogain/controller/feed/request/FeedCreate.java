@@ -2,7 +2,10 @@ package com.paintogain.controller.feed.request;
 
 import com.paintogain.exception.custom.InvalidRequest;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Setter
 @Getter
