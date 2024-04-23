@@ -1,6 +1,9 @@
 package com.paintogain.controller.auth;
 
 import com.paintogain.config.AppConfig;
+import com.paintogain.controller.auth.request.Login;
+import com.paintogain.controller.auth.request.Signup;
+import com.paintogain.controller.auth.response.SessionResponse;
 import com.paintogain.service.auth.AuthService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -25,7 +28,7 @@ public class AuthController {
 
     @PostMapping("/auth/login")
     public SessionResponse login(@RequestBody Login login) {
-        Long userId = authService.signIn(login);
+        Long userId = authService.signin(login);
 
         SecretKey key = Keys.hmacShaKeyFor(appConfig.getSecretKey());
 
@@ -36,5 +39,10 @@ public class AuthController {
                 .compact();
 
         return new SessionResponse(jws);
+    }
+
+    @PostMapping("/auth/signup")
+    public void signup(@RequestBody Signup signup) {
+        authService.signup(signup);
     }
 }

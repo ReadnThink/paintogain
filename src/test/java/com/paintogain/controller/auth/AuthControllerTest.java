@@ -1,16 +1,14 @@
 package com.paintogain.controller.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.paintogain.config.AuthResolver;
-import com.paintogain.controller.feed.request.FeedCreate;
+import com.paintogain.controller.auth.request.Login;
+import com.paintogain.controller.auth.request.Signup;
 import com.paintogain.domain.Session;
 import com.paintogain.domain.User;
-import com.paintogain.exception.custom.InvalidRequest;
-import com.paintogain.exception.custom.Unauthorized;
 import com.paintogain.repository.SessionRepository;
 import com.paintogain.repository.UserRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.paintogain.config.AuthResolver.*;
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -87,17 +83,15 @@ class AuthControllerTest {
                     .build();
             userRepository.save(user);
 
-            Login build = Login.builder()
+            Login login = Login.builder()
                     .email("sol@gmail.com")
                     .password("1234")
                     .build();
 
-            String json = objectMapper.writeValueAsString(build);
-
             //when
             mockMvc.perform(post("/auth/login")
                             .contentType(APPLICATION_JSON)
-                            .content(json)
+                            .content(objectMapper.writeValueAsString(login))
                     )
                     .andExpect(status().isOk())
                     .andDo(print());
@@ -174,6 +168,29 @@ class AuthControllerTest {
                     .andDo(print());
         }
 
+    }
+
+    @Nested
+    class 회원가입 {
+
+        @Test
+        @DisplayName("회원가입 성공")
+        void signIn() throws Exception {
+            // given
+            var signup = Signup.builder()
+                    .name("Test")
+                    .email("sol@gmail.com")
+                    .password("1234")
+                    .build();
+
+            //when
+            mockMvc.perform(post("/auth/signup")
+                            .content(objectMapper.writeValueAsString(signup))
+                            .contentType(APPLICATION_JSON)
+                    )
+                    .andExpect(status().isOk())
+                    .andDo(print());
+        }
     }
 
 }

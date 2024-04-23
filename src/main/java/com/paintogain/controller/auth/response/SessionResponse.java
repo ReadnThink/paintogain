@@ -1,4 +1,4 @@
-package com.paintogain.controller.auth;
+package com.paintogain.controller.auth.response;
 
 import lombok.Getter;
 import lombok.Setter;

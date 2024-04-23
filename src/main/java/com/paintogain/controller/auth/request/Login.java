@@ -1,4 +1,4 @@
-package com.paintogain.controller.auth;
+package com.paintogain.controller.auth.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
