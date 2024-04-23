@@ -18,13 +18,8 @@ spring:
     web:
       pageable:
         one-indexed-parameters: true
-
-  # data.sql 넣기 위함
   jpa:
     defer-datasource-initialization: true
-  sql:
-    init:
-      mode: always
 
 jwt:
   secretKey: "7BRV1zT/adqZFA2eKmVZLY4yApVWuz0CWKqVIf+2oc4="
