@@ -1,6 +1,5 @@
 package com.paintogain.service.auth;
 
-import com.paintogain.controller.auth.request.Login;
 import com.paintogain.controller.auth.request.Signup;
 import com.paintogain.domain.User;
 import com.paintogain.exception.custom.AlreadyExistsEmailException;
@@ -19,18 +18,6 @@ public class AuthService {
     public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    @Transactional
-    public Long signin(Login login) {
-        var user = userRepository.findByEmail(login.getEmail())
-                .orElseThrow(InvalidSigninInformation::new);
-
-        if (!passwordEncoder.matches(login.getPassword(), user.getPassword())) {
-            throw new InvalidSigninInformation();
-        }
-
-        return user.getId();
     }
 
     public void signup(Signup signup) {

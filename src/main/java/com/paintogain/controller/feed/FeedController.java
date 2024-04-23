@@ -1,6 +1,5 @@
 package com.paintogain.controller.feed;
 
-import com.paintogain.config.data.UserSession;
 import com.paintogain.controller.feed.request.FeedCreate;
 import com.paintogain.controller.feed.request.FeedEdit;
 import com.paintogain.controller.feed.response.FeedResponse;
@@ -19,12 +18,6 @@ public class FeedController {
 
     public FeedController(FeedService feedService) {
         this.feedService = feedService;
-    }
-
-    @GetMapping("/test")
-    public Long test(UserSession userSession) {
-        log.info("UserSession >>> {}", userSession.id);
-        return userSession.getId();
     }
 
     @PostMapping("/feeds")

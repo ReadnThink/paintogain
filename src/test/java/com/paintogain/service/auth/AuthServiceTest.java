@@ -1,6 +1,5 @@
 package com.paintogain.service.auth;
 
-import com.paintogain.controller.auth.request.Login;
 import com.paintogain.controller.auth.request.Signup;
 import com.paintogain.domain.User;
 import com.paintogain.exception.custom.AlreadyExistsEmailException;
@@ -83,50 +82,6 @@ class AuthServiceTest {
 
     @Nested
     class 로그인 {
-
-        @Test
-        @DisplayName("로그인 성공")
-        void login1() {
-            // given
-            var user = User.builder()
-                    .email("sol@gmail.com")
-                    .password(passwordEncoder.encode("1234"))
-                    .name("sol")
-                    .build();
-            userRepository.save(user);
-
-            var login = Login.builder()
-                    .email("sol@gmail.com")
-                    .password("1234")
-                    .build();
-
-            // when
-            Long userId = authService.signin(login);
-
-            assertThat(userId).isEqualTo(1L);
-        }
-
-        @Test
-        @DisplayName("로그인 실패 - 패스워드 틀림")
-        void login2() {
-            // given
-            var user = User.builder()
-                    .email("sol@gmail.com")
-                    .password(passwordEncoder.encode("1234"))
-                    .name("sol")
-                    .build();
-            userRepository.save(user);
-
-            var login = Login.builder()
-                    .email("sol@gmail.com")
-                    .password("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
-                    .build();
-
-            // expected
-            assertThatThrownBy(() -> authService.signin(login))
-                    .isInstanceOf(InvalidSigninInformation.class)
-                    .hasMessage("아이디/비밀번호가 올바르지 않습니다");
-        }
 
     }
 }
