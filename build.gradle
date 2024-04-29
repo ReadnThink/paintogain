@@ -58,6 +58,9 @@ dependencies {
 	// spring security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	// jdbc session
+	implementation 'org.springframework.session:spring-session-jdbc'
 }
 
 tasks.named('bootBuildImage') {

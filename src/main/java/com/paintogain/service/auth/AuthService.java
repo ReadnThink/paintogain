@@ -13,7 +13,9 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AuthService(UserRepository userRepository
+            , PasswordEncoder passwordEncoder
+    ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -26,7 +28,11 @@ public class AuthService {
 
         var user = User.builder()
                 .name(signup.getName())
-                .password(passwordEncoder.encode(signup.getPassword()))
+                .password(
+                        passwordEncoder.encode(
+                                signup.getPassword()
+                        )
+                )
                 .email(signup.getEmail())
                 .build();
 
