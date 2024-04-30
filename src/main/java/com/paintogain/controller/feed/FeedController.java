@@ -1,5 +1,6 @@
 package com.paintogain.controller.feed;
 
+import com.paintogain.config.security.UserPrincipal;
 import com.paintogain.controller.feed.request.FeedCreate;
 import com.paintogain.controller.feed.request.FeedEdit;
 import com.paintogain.controller.feed.response.FeedResponse;
@@ -8,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,9 +25,9 @@ public class FeedController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @PostMapping("/feeds")
-    public void feed(@RequestBody @Valid FeedCreate feedCreate) {
+    public void feed(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid FeedCreate feedCreate) {
         feedCreate.isContainBadWords();
-        feedService.save(feedCreate);
+        feedService.save(userPrincipal.getUserId(), feedCreate);
     }
 
     @GetMapping("/feeds/{feedId}")
@@ -44,7 +46,8 @@ public class FeedController {
         feedService.edit(feedId, feedEdit);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER') && hasPermission(#feedId, 'POST', 'DELETE')")
     @DeleteMapping("/feeds/{feedId}")
     public void delete(@PathVariable Long feedId) {
         feedService.delete(feedId);

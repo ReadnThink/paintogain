@@ -45,6 +45,7 @@ class FeedServiceTest {
                     .title("title")
                     .content("Hello world")
                     .build();
+
             // when
             feedService.save(feedCreate);
 

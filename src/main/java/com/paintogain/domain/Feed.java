@@ -17,14 +17,20 @@ public class Feed {
     private Long id;
 
     private String title;
+
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
+    @ManyToOne
+    @JoinColumn
+    private User user;
+
     @Builder
-    public Feed(Long id, String title, String content) {
+    public Feed(Long id, String title, String content, User user) {
         this.id = id;
         this.title = title;
         this.content = content;
+        this.user = user;
     }
 
     public FeedResponse toFeedResponse() {
@@ -38,5 +44,9 @@ public class Feed {
     public void edit(FeedEdit feedEdit) {
         this.title = feedEdit.getTitle();
         this.content = feedEdit.getContent();
+    }
+
+    public Long getUserId() {
+        return this.user.getId();
     }
 }
