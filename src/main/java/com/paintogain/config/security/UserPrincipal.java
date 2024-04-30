@@ -15,8 +15,7 @@ public class UserPrincipal extends User {
      */
     public UserPrincipal(com.paintogain.domain.User appUser) {
         super(appUser.getEmail(), appUser.getPassword(),
-                List.of(
-                        new SimpleGrantedAuthority("ROLE_USER")));
+                List.of(new SimpleGrantedAuthority("ROLE_USER")));
         this.userId = appUser.getId();
     }
 

@@ -19,13 +19,3 @@ Content-Type: application/json
   "email": "sol@gmail.com",
   "password": "1234"
 }
-
-
-### 사용자 페이지
-GET http://localhost:8090/user
-
-### 관리자 페이지
-GET http://localhost:8090/admin
-
-### 메인 페이지
-GET http://localhost:8090

@@ -1,17 +1,20 @@
 package com.paintogain.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.paintogain.annotation.CustomWithMockUser;
 import com.paintogain.controller.feed.request.FeedCreate;
 import com.paintogain.controller.feed.request.FeedEdit;
 import com.paintogain.domain.Feed;
 import com.paintogain.repository.FeedRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -46,6 +49,8 @@ class FeedControllerTest {
     @Nested
     class 피드_저장 {
         @Test
+        @CustomWithMockUser
+        @DisplayName("피드 작성 성공")
         void 피드_DB_저장_성공() throws Exception {
             // given
             FeedCreate feedCreate = FeedCreate.builder()
@@ -69,6 +74,8 @@ class FeedControllerTest {
         }
 
         @Test
+        @CustomWithMockUser
+        @DisplayName("피드 저장 실패 타이틀 Null")
         void 피드_저장_실패_타이틀_Null() throws Exception {
             //given
             FeedCreate feedCreate = FeedCreate.builder()
@@ -90,6 +97,8 @@ class FeedControllerTest {
         }
 
         @Test
+        @CustomWithMockUser
+        @DisplayName("피드 저장 실패 바보포함")
         void 피드_저장_실패_바보포함() throws Exception {
             //given
             FeedCreate feedCreate = FeedCreate.builder()
@@ -115,6 +124,7 @@ class FeedControllerTest {
     @Nested
     class 피드_조회 {
         @Test
+        @DisplayName("피드 1개조회 성공")
         void 피드_1개조회_성공() throws Exception {
             // given
             Feed feed = Feed.builder()
@@ -135,6 +145,7 @@ class FeedControllerTest {
         }
 
         @Test
+        @DisplayName("피드 1개조회 실패 존재X")
         void 피드_1개조회_실패_존재X() throws Exception {
             // expected
             mockMvc.perform(get("/feeds/{feedId}", 1L)
@@ -146,6 +157,7 @@ class FeedControllerTest {
 
 
         @Test
+        @DisplayName("피드 첫페이지 조회 성공")
         void 피드_첫페이지조회_성공() throws Exception {
             // given
             List<Feed> requestFeedList = IntStream.range(1, 31)
@@ -180,6 +192,8 @@ class FeedControllerTest {
     class 피드_수정 {
 
         @Test
+        @CustomWithMockUser(role = "ROLE_ADMIN")
+        @DisplayName("피드 수정 성공")
         void 피드_수정_성공() throws Exception {
             Feed feed = Feed.builder().title("title").content("content").build();
             FeedEdit feedEdit = FeedEdit.builder().title("edit").content("edit content").build();
@@ -195,6 +209,8 @@ class FeedControllerTest {
                     .andDo(print());
         }
         @Test
+        @CustomWithMockUser(role = "ROLE_ADMIN")
+        @DisplayName("피드 수정 실패 존재X")
         void 피드_수정_실패_존재X() throws Exception {
             FeedEdit feedEdit = FeedEdit.builder().title("edit").content("edit content").build();
 
@@ -214,6 +230,8 @@ class FeedControllerTest {
     class 피드_삭제 {
 
         @Test
+        @CustomWithMockUser(role = "ROLE_ADMIN")
+        @DisplayName("피드 삭제 성공")
         void 피드_삭제_성공() throws Exception {
             Feed feed = Feed.builder().title("title").content("content").build();
             feedRepository.save(feed);

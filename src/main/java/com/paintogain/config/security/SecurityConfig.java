@@ -5,6 +5,7 @@ import com.paintogain.config.security.filter.EmailPasswordAuthFilter;
 import com.paintogain.config.security.handler.Http401Handler;
 import com.paintogain.config.security.handler.Http403Handler;
 import com.paintogain.config.security.handler.LoginFailHandler;
+import com.paintogain.config.security.handler.LoginSuccessHandler;
 import com.paintogain.domain.User;
 import com.paintogain.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
@@ -65,9 +65,6 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() //   /css/**, /js/**, /images/**, /webjars/**, /favicon.*, /*/icon-* 허용
-                        .requestMatchers("/feeds/**").hasAnyRole("USER", "ADMIN")
-//                        .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
-//                        .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(emailPasswordAuthFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -83,7 +80,7 @@ public class SecurityConfig {
     public EmailPasswordAuthFilter emailPasswordAuthFilter() {
         EmailPasswordAuthFilter filter = new EmailPasswordAuthFilter(LOGIN_URL, objectMapper);
         filter.setAuthenticationManager(authenticationManager());
-        filter.setAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler("/"));
+        filter.setAuthenticationSuccessHandler(new LoginSuccessHandler(objectMapper));
         filter.setAuthenticationFailureHandler(new LoginFailHandler(objectMapper));
         filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
 

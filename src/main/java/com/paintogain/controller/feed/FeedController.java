@@ -7,6 +7,7 @@ import com.paintogain.service.feed.FeedService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,12 +21,11 @@ public class FeedController {
         this.feedService = feedService;
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @PostMapping("/feeds")
-    public void feed(@RequestBody @Valid FeedCreate feedCreate, @RequestHeader String authorization) {
-        if (authorization.equals("sol")) {
-            feedCreate.isContainBadWords();
-            feedService.save(feedCreate);
-        }
+    public void feed(@RequestBody @Valid FeedCreate feedCreate) {
+        feedCreate.isContainBadWords();
+        feedService.save(feedCreate);
     }
 
     @GetMapping("/feeds/{feedId}")
@@ -38,17 +38,15 @@ public class FeedController {
         return feedService.getFeedList(pageable);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PatchMapping("/feeds/{feedId}")
-    public void edit(@PathVariable Long feedId, @RequestBody @Valid FeedEdit feedEdit, @RequestHeader String authorization) {
-        if (authorization.equals("sol")) {
-            feedService.edit(feedId, feedEdit);
-        }
+    public void edit(@PathVariable Long feedId, @RequestBody @Valid FeedEdit feedEdit) {
+        feedService.edit(feedId, feedEdit);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @DeleteMapping("/feeds/{feedId}")
-    public void delete(@PathVariable Long feedId, @RequestHeader String authorization) {
-        if (authorization.equals("sol")) {
-            feedService.delete(feedId);
-        }
+    public void delete(@PathVariable Long feedId) {
+        feedService.delete(feedId);
     }
 }

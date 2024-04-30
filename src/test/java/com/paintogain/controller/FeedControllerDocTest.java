@@ -1,6 +1,7 @@
 package com.paintogain.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.paintogain.annotation.CustomWithMockUser;
 import com.paintogain.controller.feed.request.FeedCreate;
 import com.paintogain.controller.feed.request.FeedEdit;
 import com.paintogain.domain.Feed;
@@ -108,6 +109,7 @@ public class FeedControllerDocTest {
     }
 
     @Test
+    @CustomWithMockUser()
     @DisplayName("피드 저장 테스트")
     void 피드_저장() throws Exception {
         // given
@@ -138,7 +140,8 @@ public class FeedControllerDocTest {
     }
 
     @Test
-    @DisplayName("피드 저장 테스트")
+    @CustomWithMockUser(role = "ROLE_ADMIN")
+    @DisplayName("피드 수정 테스트")
     void 피드_수정() throws Exception {
         Feed feed = Feed.builder()
                 .title("제목")
@@ -176,6 +179,7 @@ public class FeedControllerDocTest {
     }
 
     @Test
+    @CustomWithMockUser(role = "ROLE_ADMIN")
     @DisplayName("피드 단건삭제 테스트")
     void 피드_삭제() throws Exception {
         // given

@@ -1,7 +1,38 @@
-### 테스트 요청
+### 게시글 전체 조회
 ### LocalPost = 8090
    ### 변수화 할 수 있음 나중에 찾아볼것 (intellij http)
 
-GET http://localhost:8090/test
+GET http://localhost:8090/feeds
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzEzNzc4NDI1fQ.RJIyZL3IAuJK4MlEgt11sd3ekqTuCAmBGNC4lnBP-2U
+
+
+### 게시글 한건 조회
+
+GET http://localhost:8090/feeds/2
+Content-Type: application/json
+
+
+### 게시글 작성
+
+POST http://localhost:8090/feeds
+Content-Type: application/json
+
+{
+  "title": "제목입니다.",
+  "content": "내용입니다."
+}
+
+### 게시글 수정
+
+PATCH http://localhost:8090/feeds/1
+Content-Type: application/json
+
+{
+  "title": "수정입니다.",
+  "content": "내용입니다."
+}
+
+### 게시글 삭제
+
+DELETE http://localhost:8090/feeds/2
+Content-Type: application/json
