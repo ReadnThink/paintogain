@@ -4,8 +4,11 @@ import com.paintogain.controller.feed.request.FeedCreate;
 import com.paintogain.controller.feed.request.FeedEdit;
 import com.paintogain.controller.feed.response.FeedResponse;
 import com.paintogain.domain.Feed;
+import com.paintogain.domain.User;
 import com.paintogain.exception.custom.FeedNotFound;
 import com.paintogain.repository.FeedRepository;
+import com.paintogain.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -31,9 +34,13 @@ class FeedServiceTest {
     @Autowired
     private FeedRepository feedRepository;
 
-    @BeforeEach
+    @Autowired
+    private UserRepository userRepository;
+
+    @AfterEach
     void setUp() {
         feedRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Nested
@@ -41,13 +48,19 @@ class FeedServiceTest {
         @Test
         void 피드작성() {
             // given
+            var user = User.builder()
+                    .name("sol")
+                    .email("sol@gmail.com")
+                    .password("1234")
+                    .build();
+            userRepository.save(user);
             FeedCreate feedCreate = FeedCreate.builder()
                     .title("title")
                     .content("Hello world")
                     .build();
 
             // when
-            feedService.save(feedCreate);
+            feedService.save(user.getId(), feedCreate);
 
             //then
             assertThat(feedRepository.count()).isEqualTo(1L);

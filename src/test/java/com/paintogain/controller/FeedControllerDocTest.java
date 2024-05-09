@@ -5,7 +5,10 @@ import com.paintogain.annotation.CustomWithMockUser;
 import com.paintogain.controller.feed.request.FeedCreate;
 import com.paintogain.controller.feed.request.FeedEdit;
 import com.paintogain.domain.Feed;
+import com.paintogain.domain.User;
 import com.paintogain.repository.FeedRepository;
+import com.paintogain.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,18 +49,29 @@ public class FeedControllerDocTest {
     @Autowired
     FeedRepository feedRepository;
 
-    @BeforeEach
+    @Autowired
+    UserRepository userRepository;
+
+    @AfterEach
     void setUp() {
         feedRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
     @DisplayName("피드 단건조회 테스트")
     void 피드_단건조회() throws Exception {
         // given
-        Feed feed = Feed.builder()
+        var user = User.builder()
+                .email("sol@gmail.com")
+                .name("sol")
+                .password("1234")
+                .build();
+        userRepository.save(user);
+        var feed = Feed.builder()
                 .title("제목")
                 .content("내용")
+                .user(user)
                 .build();
         feedRepository.save(feed);
 
@@ -81,7 +95,7 @@ public class FeedControllerDocTest {
     @DisplayName("피드 목록 조회 테스트 - 10건씩 페이징 처리")
     void 피드_목록조회() throws Exception {
         // given
-        List<Feed> requestFeedList = IntStream.range(1, 31)
+        var requestFeedList = IntStream.range(1, 31)
                 .mapToObj(i -> Feed.builder()
                         .title("Title" + i)
                         .content("Content" + i)
@@ -113,11 +127,11 @@ public class FeedControllerDocTest {
     @DisplayName("피드 저장 테스트")
     void 피드_저장() throws Exception {
         // given
-        FeedCreate feedCreate = FeedCreate.builder()
+        var feedCreate = FeedCreate.builder()
                 .title("제목")
                 .content("내용")
                 .build();
-        String json = objectMapper.writeValueAsString(feedCreate);
+        var json = objectMapper.writeValueAsString(feedCreate);
 
         // expect
         mockMvc.perform(post("/feeds")
@@ -143,18 +157,20 @@ public class FeedControllerDocTest {
     @CustomWithMockUser(role = "ROLE_ADMIN")
     @DisplayName("피드 수정 테스트")
     void 피드_수정() throws Exception {
-        Feed feed = Feed.builder()
+        // given
+        var user = userRepository.findAll().get(0); // CustomWithMockUser 에서 만든 User를 가져옴
+        var feed = Feed.builder()
                 .title("제목")
                 .content("내용")
+                .user(user)
                 .build();
         feedRepository.save(feed);
 
-        // given
-        FeedEdit feedEdit = FeedEdit.builder()
+        var feedEdit = FeedEdit.builder()
                 .title("제목")
                 .content("내용")
                 .build();
-        String json = objectMapper.writeValueAsString(feedEdit);
+        var json = objectMapper.writeValueAsString(feedEdit);
 
         // expect
         mockMvc.perform(patch("/feeds/{feedId}", feed.getId())
@@ -179,13 +195,15 @@ public class FeedControllerDocTest {
     }
 
     @Test
-    @CustomWithMockUser(role = "ROLE_ADMIN")
+    @CustomWithMockUser(role = "ROLE_USER")
     @DisplayName("피드 단건삭제 테스트")
     void 피드_삭제() throws Exception {
         // given
-        Feed feed = Feed.builder()
+        var user = userRepository.findAll().get(0); // CustomWithMockUser 에서 만든 User를 가져옴
+        var feed = Feed.builder()
                 .title("제목")
                 .content("내용")
+                .user(user)
                 .build();
         feedRepository.save(feed);
 

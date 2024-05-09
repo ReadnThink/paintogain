@@ -3,10 +3,7 @@ package com.paintogain.controller.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paintogain.controller.auth.request.Signup;
 import com.paintogain.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,7 +27,7 @@ class AuthControllerTest {
     private UserRepository userRepository;
 
 
-    @BeforeEach
+    @AfterEach
     void setUp() {
         userRepository.deleteAll();
     }

@@ -5,12 +5,11 @@ import com.paintogain.annotation.CustomWithMockUser;
 import com.paintogain.controller.feed.request.FeedCreate;
 import com.paintogain.controller.feed.request.FeedEdit;
 import com.paintogain.domain.Feed;
+import com.paintogain.domain.User;
 import com.paintogain.repository.FeedRepository;
+import com.paintogain.repository.UserRepository;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,9 +40,13 @@ class FeedControllerTest {
     @Autowired
     private FeedRepository feedRepository;
 
-    @BeforeEach
+    @Autowired
+    private UserRepository userRepository;
+
+    @AfterEach
     void setUp() {
         feedRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Nested
@@ -127,9 +130,16 @@ class FeedControllerTest {
         @DisplayName("피드 1개조회 성공")
         void 피드_1개조회_성공() throws Exception {
             // given
-            Feed feed = Feed.builder()
-                    .title("title")
-                    .content("content")
+            var user = User.builder()
+                    .email("sol@gmail.com")
+                    .name("sol")
+                    .password("1234")
+                    .build();
+            userRepository.save(user);
+            var feed = Feed.builder()
+                    .title("제목")
+                    .content("내용")
+                    .user(user)
                     .build();
             feedRepository.save(feed);
 
@@ -139,8 +149,8 @@ class FeedControllerTest {
                     )
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id").value(feed.getId()))
-                    .andExpect(jsonPath("$.title").value("title"))
-                    .andExpect(jsonPath("$.content").value("content"))
+                    .andExpect(jsonPath("$.title").value("제목"))
+                    .andExpect(jsonPath("$.content").value("내용"))
                     .andDo(print());
         }
 
@@ -162,8 +172,8 @@ class FeedControllerTest {
             // given
             List<Feed> requestFeedList = IntStream.range(1, 31)
                     .mapToObj(i -> Feed.builder()
-                            .title("Title" + i)
-                            .content("Content" + i)
+                            .title("제목" + i)
+                            .content("내용" + i)
                             .build())
                     .collect(Collectors.toList());
             feedRepository.saveAll(requestFeedList);
@@ -174,16 +184,16 @@ class FeedControllerTest {
                     )
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.length()", Matchers.is(5)))
-                    .andExpect(jsonPath("$[0].title").value("Title30"))
-                    .andExpect(jsonPath("$[0].content").value("Content30"))
-                    .andExpect(jsonPath("$[1].title").value("Title29"))
-                    .andExpect(jsonPath("$[1].content").value("Content29"))
-                    .andExpect(jsonPath("$[2].title").value("Title28"))
-                    .andExpect(jsonPath("$[2].content").value("Content28"))
-                    .andExpect(jsonPath("$[3].title").value("Title27"))
-                    .andExpect(jsonPath("$[3].content").value("Content27"))
-                    .andExpect(jsonPath("$[4].title").value("Title26"))
-                    .andExpect(jsonPath("$[4].content").value("Content26"))
+                    .andExpect(jsonPath("$[0].title").value("제목30"))
+                    .andExpect(jsonPath("$[0].content").value("내용30"))
+                    .andExpect(jsonPath("$[1].title").value("제목29"))
+                    .andExpect(jsonPath("$[1].content").value("내용29"))
+                    .andExpect(jsonPath("$[2].title").value("제목28"))
+                    .andExpect(jsonPath("$[2].content").value("내용28"))
+                    .andExpect(jsonPath("$[3].title").value("제목27"))
+                    .andExpect(jsonPath("$[3].content").value("내용27"))
+                    .andExpect(jsonPath("$[4].title").value("제목26"))
+                    .andExpect(jsonPath("$[4].content").value("내용26"))
                     .andDo(print());
         }
     }
@@ -195,9 +205,17 @@ class FeedControllerTest {
         @CustomWithMockUser(role = "ROLE_ADMIN")
         @DisplayName("피드 수정 성공")
         void 피드_수정_성공() throws Exception {
-            Feed feed = Feed.builder().title("title").content("content").build();
-            FeedEdit feedEdit = FeedEdit.builder().title("edit").content("edit content").build();
+            var user = userRepository.findAll().get(0); // CustomWithMockUser 에서 만든 User를 가져옴
+            var feed = Feed.builder()
+                    .title("제목")
+                    .content("내용")
+                    .user(user)
+                    .build();
             feedRepository.save(feed);
+            var feedEdit = FeedEdit.builder()
+                    .title("edit")
+                    .content("edit content")
+                    .build();
 
             // expected
             mockMvc.perform(patch("/feeds/{feedId}", feed.getId())
@@ -230,10 +248,16 @@ class FeedControllerTest {
     class 피드_삭제 {
 
         @Test
-        @CustomWithMockUser(role = "ROLE_ADMIN")
+        @CustomWithMockUser(role = "ROLE_USER")
         @DisplayName("피드 삭제 성공")
         void 피드_삭제_성공() throws Exception {
-            Feed feed = Feed.builder().title("title").content("content").build();
+            // given
+            var user = userRepository.findAll().get(0); // CustomWithMockUser 에서 만든 User를 가져옴
+            var feed = Feed.builder()
+                    .title("제목")
+                    .content("내용")
+                    .user(user)
+                    .build();
             feedRepository.save(feed);
 
             // expected
