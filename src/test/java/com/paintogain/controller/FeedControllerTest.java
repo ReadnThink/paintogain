@@ -6,14 +6,13 @@ import com.paintogain.controller.feed.request.FeedCreate;
 import com.paintogain.controller.feed.request.FeedEdit;
 import com.paintogain.domain.Feed;
 import com.paintogain.domain.User;
-import com.paintogain.repository.FeedRepository;
-import com.paintogain.repository.UserRepository;
+import com.paintogain.repository.feed.FeedRepository;
+import com.paintogain.repository.user.UserRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;

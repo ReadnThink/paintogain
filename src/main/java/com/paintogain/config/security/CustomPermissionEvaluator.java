@@ -1,7 +1,7 @@
 package com.paintogain.config.security;
 
 import com.paintogain.exception.custom.FeedNotFound;
-import com.paintogain.repository.FeedRepository;
+import com.paintogain.repository.feed.FeedRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;

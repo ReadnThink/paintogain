@@ -3,7 +3,7 @@ package com.paintogain.service.auth;
 import com.paintogain.controller.auth.request.Signup;
 import com.paintogain.domain.User;
 import com.paintogain.exception.custom.AlreadyExistsEmailException;
-import com.paintogain.repository.UserRepository;
+import com.paintogain.repository.user.UserRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

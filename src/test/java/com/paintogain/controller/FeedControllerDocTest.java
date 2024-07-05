@@ -6,10 +6,9 @@ import com.paintogain.controller.feed.request.FeedCreate;
 import com.paintogain.controller.feed.request.FeedEdit;
 import com.paintogain.domain.Feed;
 import com.paintogain.domain.User;
-import com.paintogain.repository.FeedRepository;
-import com.paintogain.repository.UserRepository;
+import com.paintogain.repository.feed.FeedRepository;
+import com.paintogain.repository.user.UserRepository;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +21,6 @@ import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 

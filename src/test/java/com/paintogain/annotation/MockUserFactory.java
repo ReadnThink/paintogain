@@ -2,7 +2,7 @@ package com.paintogain.annotation;
 
 import com.paintogain.config.security.UserPrincipal;
 import com.paintogain.domain.User;
-import com.paintogain.repository.UserRepository;
+import com.paintogain.repository.user.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;

@@ -7,7 +7,7 @@ import com.paintogain.config.security.handler.Http403Handler;
 import com.paintogain.config.security.handler.LoginFailHandler;
 import com.paintogain.config.security.handler.LoginSuccessHandler;
 import com.paintogain.domain.User;
-import com.paintogain.repository.UserRepository;
+import com.paintogain.repository.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +16,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -57,7 +56,6 @@ public class SecurityConfig {
                 .requestMatchers(toH2Console());
     }
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -67,14 +65,15 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(emailPasswordAuthFilter(), UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(e ->
-                        e.accessDeniedHandler(new Http403Handler(objectMapper))
-                                .authenticationEntryPoint(new Http401Handler(objectMapper))
+                .exceptionHandling(e -> e
+                        .accessDeniedHandler(new Http403Handler(objectMapper))
+                        .authenticationEntryPoint(new Http401Handler(objectMapper))
                 )
                 .logout(LogoutConfigurer::permitAll)
                 .httpBasic(Customizer.withDefaults())
                 .build();
     }
+
     @Bean
     public EmailPasswordAuthFilter emailPasswordAuthFilter() {
         EmailPasswordAuthFilter filter = new EmailPasswordAuthFilter(LOGIN_URL, objectMapper);

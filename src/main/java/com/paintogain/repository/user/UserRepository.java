@@ -1,4 +1,4 @@
-package com.paintogain.repository;
+package com.paintogain.repository.user;
 
 import com.paintogain.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;

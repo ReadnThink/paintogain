@@ -43,4 +43,21 @@ public class ExceptionHandler {
 
         return response;
     }
+
+    @ResponseBody
+    @org.springframework.web.bind.annotation.ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> exception(Exception e) {
+        log.error("예외발생", e);
+
+        ErrorResponse body = ErrorResponse.builder()
+                .httpStatus("500")
+                .message(e.getMessage())
+                .build();
+
+        ResponseEntity<ErrorResponse> response = ResponseEntity
+                .status(500)
+                .body(body);
+
+        return response;
+    }
 }

@@ -1,4 +1,4 @@
-package com.paintogain.repository;
+package com.paintogain.repository.feed;
 
 import com.paintogain.domain.Feed;
 import org.springframework.data.jpa.repository.JpaRepository;

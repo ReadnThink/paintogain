@@ -1,6 +1,6 @@
 package com.paintogain.config.security;
 
-import com.paintogain.repository.FeedRepository;
+import com.paintogain.repository.feed.FeedRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
