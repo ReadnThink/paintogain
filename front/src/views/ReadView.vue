@@ -1,87 +1,92 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import axios from 'axios'
-import router from '@/router'
-
-const props = defineProps({
-  feedId: {
-    type: [Number, String],
-    required: true
-  }
-})
-
-const feed = ref({
-  id: 0,
-  title: '',
-  content: ''
-})
-
-const moveToEdit = () => {
-  router.push({ name: 'edit', params: { feedId: props.feedId } })
-}
-
-onMounted(() => {
-  axios.get(`/my-backend-api/feeds/${props.feedId}`).then(response => {
-    feed.value = response.data
-  })
-})
+import Comments from '@/components/Comments.vue'
 </script>
 
 <template>
+  <el-row>
+    <el-col :span="22" :offset="1">
+      <div class="title">개발자의 별 헤는 밤</div>
+    </el-col>
+  </el-row>
+
+  <el-row>
+    <el-col :span="10" :offset="7">
+      <div class="title">
+        <div class="regDate">Posted on 2023-02-01</div>
+      </div>
+    </el-col>
+  </el-row>
 
   <el-row>
     <el-col>
-      <h2 class="title">{{ feed.title }}</h2>
+      <div class="content">
+        계절이 지나가는 하늘에는 가을로 가득 차 있습니다. 나는 아무 걱정도 없이 가을 속의 별들을 다 헤일 듯합니다.
+        가슴속에 하나둘 새겨지는 별을 이제 다 못 헤는 것은 쉬이 아침이 오는 까닭이요, 내일 밤이 남은 까닭이요, 아직 나의
+        청춘이 다하지 않은 까닭입니다. 별 하나에 추억과 별 하나에 사랑과 별 하나에 쓸쓸함과 별 하나에 동경과 별 하나에
+        시와 별 하나에 어머니, 어머니, 어머님, 나는 별 하나에 아름다운 말 한마디씩 불러 봅니다. 소학교 때 책상을 같이
+        했던 아이들의 이름과, 패, 경, 옥, 이런 이국 소녀들의 이름과, 벌써 아기 어머니 된 계집애들의 이름과, 가난한 이웃
+        사람들의 이름과, 비둘기, 강아지, 토끼, 노새, 노루, '프랑시스 잠[1]', '라이너 마리아 릴케[2]' 이런 시인의 이름을
+        불러 봅니다. 이네들은 너무나 멀리 있습니다. 별이 아스라이 멀듯이. 어머님, 그리고 당신은 멀리 북간도에 계십니다.
+        나는 무엇인지 그리워 이 많은 별빛이 내린 언덕 위에 내 이름자를 써 보고 흙으로 덮어 버리었습니다. 딴은[3] 밤을
+        새워 우는 벌레는 부끄러운 이름을 슬퍼하는 까닭입니다. 그러나 겨울이 지나고 나의 별에도 봄이 오면 무덤 위에 파란
+        잔디가 피어나듯이 내 이름자 묻힌 언덕 위에도 자랑처럼 풀이 무성할 거외다. (1941. 11. 5.)
+      </div>
 
-      <div class="sub d-flex">
-        <div class="category">
-          개발::하드코딩
-        </div>
-        <div class="regDate">
-          2024-04-09 11:09:22 ::하드코딩
-        </div>
+      <div class="footer">
+        <div class="edit">수정</div>
+        <div class="delete">삭제</div>
       </div>
     </el-col>
   </el-row>
 
-  <el-row class="mt-3">
+  <el-row class="comments">
     <el-col>
-      <div class="content">{{ feed.content }}</div>
-    </el-col>
-  </el-row>
-
-  <el-row class="mt-3">
-    <el-col>
-      <div class="d-flex justify-content-end">
-        <el-button type="warning" @click="moveToEdit()">수정</el-button>
-      </div>
+      <Comments />
     </el-col>
   </el-row>
 </template>
 
 <style scoped lang="scss">
 .title {
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: #383838;
-  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 400;
+  text-align: center;
+}
+
+.regDate {
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 300;
 }
 
 .content {
-  font-size: 0.85rem;
-  margin-top: 12px;
-  color: #7e7e7e;
-  white-space: break-spaces;
+  margin-top: 1.88rem;
+  font-weight: 300;
 
+  word-break: break-all;
+  white-space: break-spaces;
+  line-height: 1.4;
+  min-height: 5rem;
 }
 
-.sub {
-  margin-top: 10px;
-  font-size: 0.78rem;
+hr {
+  border-color: #f9f9f9;
+  margin: 1.2rem 0;
+}
 
-  .regDate {
-    margin-left: 10px;
-    color: #6b6b6b;
+.footer {
+  margin-top: 1rem;
+  display: flex;
+  font-size: 0.78rem;
+  justify-content: flex-end;
+  gap: 0.8rem;
+
+  .delete {
+    color: red;
   }
+}
+
+.comments {
+  margin-top: 4.8rem;
 }
 </style>
