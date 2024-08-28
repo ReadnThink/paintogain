@@ -1,16 +1,18 @@
 <template>
   <ul class="menus">
     <li class="menu">
-      <router-link to="/">Home</router-link>
+      <router-link to="/">처음으로</router-link>
     </li>
     <li class="menu">
       <router-link to="/login">로그인</router-link>
     </li>
+    <li class="menu">
+      <router-link to="/write">글 작성</router-link>
+    </li>
   </ul>
 </template>
 
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .menus {

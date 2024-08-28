@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue';
-import WriteView from '../views/WriteView.vue';
-import ReadView from '../views/ReadView.vue'
-import EditView from '../views/EditView.vue'
+import HomeView from "@/views/HomeView.vue";
+import WriteView from "@/views/WriteView.vue";
+import ReadView from "@/views/ReadView.vue";
+import LoginView from "@/views/LoginView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,15 +18,14 @@ const router = createRouter({
       component: WriteView
     },
     {
-      path: "/read/:feedId",
-      name: "read",
-      component: ReadView,
-      props: true,
+      path: "/login",
+      name: "login",
+      component: LoginView,
     },
     {
-      path: "/edit/:feedId",
-      name: "edit",
-      component: EditView,
+      path: "/feed/:feedId",
+      name: "feed",
+      component: ReadView,
       props: true,
     },
     // {
