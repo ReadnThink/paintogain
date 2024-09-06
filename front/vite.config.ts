@@ -19,7 +19,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "/my-backend-api/feeds": {
+      "/my-backend-api/": {
         target: "http://localhost:8090",
         rewrite: (path) => path.replace(/^\/my-backend-api/, ""),
       }
